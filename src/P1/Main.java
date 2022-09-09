@@ -10,9 +10,18 @@ public class Main {
 
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM reiziger");
-        System.out.println("All travellers:\n");
+        System.out.println("All travellers:");
         while (rs.next()) {
-            System.out.println(rs.getString("voorletters") + " " + rs.getString("tussenvoegsel") + " " +  rs.getString("achternaam"));;
+            String output = "";
+            output += rs.getString("voorletters") + " ";
+            if (rs.getString("tussenvoegsel") != null) {
+                output += rs.getString("tussenvoegsel") + " ";
+            } else {
+                output += "";
+            }
+            output += rs.getString("achternaam");
+
+            System.out.println(output);
         }
         rs.close();
         st.close();
