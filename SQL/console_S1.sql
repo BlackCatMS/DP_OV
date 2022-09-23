@@ -47,8 +47,13 @@ ALTER TABLE medewerkers ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'M' OR g
 -- en valt direct onder de directeur.
 -- Voeg de nieuwe afdeling en de nieuwe medewerker toe aan de database.
 
+INSERT INTO afdelingen (anr, naam, locatie, hoofd)
+VALUES (50, 'ONDERZOEK', 'ENSCHEDE', null);
+
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
-VALUES (8000, 'DONK', 'A', 'ONDERZOEK', 7839, '1998-07-30', 2800, null, 20, 'M');
+VALUES (8000, 'DONK', 'A', 'ONDERZOEK', 7839, '1998-07-30', 2800, null, 50, 'M');
+
+UPDATE afdelingen SET hoofd=8000 WHERE anr=50;
 
 
 -- S1.3. Verbetering op afdelingentabel
@@ -90,12 +95,29 @@ ALTER COLUMN anr SET DATA TYPE numeric(10);
 --    telefoon      10 cijfers, uniek
 --    med_mnr       FK, verplicht
 
+CREATE TABLE adressen (
+    postcode VARCHAR(6),
+    huisnummer NUMERIC(4),
+    ingangsdatum DATE,
+    einddatum DATE CONSTRAINT ed_after_id CHECK (einddatum > ingangsdatum),
+    telefoon NUMERIC(10) UNIQUE,
+    med_mnr NUMERIC(5) NOT NULL,
+    FOREIGN KEY (med_mnr) REFERENCES medewerkers(mnr)
+);
+
+INSERT INTO adressen(postcode, huisnummer, ingangsdatum, einddatum, telefoon, med_mnr)
+VALUES ('3742CA', 10, '2022-05-15', '2025-05-15', 0611223344, 8000);
+
+
 
 -- S1.5. Commissie
 --
 -- De commissie van een medewerker (kolom `comm`) moet een bedrag bevatten als de medewerker een functie als
 -- 'VERKOPER' heeft, anders moet de commissie NULL zijn. Schrijf hiervoor een beperkingsregel. Gebruik onderstaande
 -- 'illegale' INSERTs om je beperkingsregel te controleren.
+
+ALTER TABLE medewerkers
+ADD CONSTRAINT m_verkoper_must_have_comm CHECK ((functie='VERKOPER' AND comm IS NOT NULL) AND (functie!='VERKOPER' AND comm IS NULL));
 
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8001, 'MULLER', 'TJ', 'TRAINER', 7566, '1982-08-18', 2000, 500);
