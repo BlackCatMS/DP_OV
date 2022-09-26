@@ -117,14 +117,13 @@ VALUES ('3742CA', 10, '2022-05-15', '2025-05-15', 0611223344, 8000);
 -- 'illegale' INSERTs om je beperkingsregel te controleren.
 
 ALTER TABLE medewerkers
-ADD CONSTRAINT m_verkoper_must_have_comm CHECK ((functie='VERKOPER' AND comm IS NOT NULL) AND (functie!='VERKOPER' AND comm IS NULL));
+ADD CONSTRAINT m_verkoper_must_have_comm CHECK (functie = 'VERKOPER' OR comm == NULL);;
 
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8001, 'MULLER', 'TJ', 'TRAINER', 7566, '1982-08-18', 2000, 500);
 
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8002, 'JANSEN', 'M', 'VERKOPER', 7698, '1981-07-17', 1000, NULL);
-
 
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
