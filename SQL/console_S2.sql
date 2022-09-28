@@ -62,7 +62,7 @@ SELECT naam, voorl FROM medewerkers WHERE mnr != 7900;
 -- komende 2 maart. De cursus wordt gegeven in Leerdam door Nick Smit.
 -- Voeg deze gegevens toe.
 INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
-VALUES ('S02', '02-03-2023', 7369, 'LEERDAM')
+VALUES ('S02', to_date('02-03-2023', 'DD-MM-YYYY'), 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -71,7 +71,7 @@ ON CONFLICT DO NOTHING;                                                         
 -- Neem één van je collega-studenten aan als stagiair ('STAGIAIR') en
 -- voer zijn of haar gegevens in. Kies een personeelnummer boven de 8000.
 INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
-VALUES (8002, 'TOKOYAMI', 'T', 'STAGIAIR', 7369, '08-08-2003', 1200, null)
+VALUES (8002, 'TOKOYAMI', 'T', 'STAGIAIR', 7369, to_date('08-08-2003', 'DD-MM-YYYY'), 1200, null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -93,19 +93,19 @@ INSERT INTO cursussen(code, omschrijving, type, lengte)
 VALUES ('D&P', 'Data & Persistency', 'DSG', 6)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
-VALUES ('D&P', '03-10-22', 7369, 'LEERDAM')
+VALUES ('D&P', to_date('03-10-22', 'DD-MM-YYYY'), 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
-VALUES ('D&P', '03-10-22', 7369, 'LEERDAM')
+VALUES ('D&P', to_date('03-10-22', 'DD-MM-YYYY'), 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
-VALUES (7499, 'D&P', '03-10-22', null)
+VALUES (7499, 'D&P', to_date('03-10-22', 'DD-MM-YYYY'), null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
-VALUES (7521, 'D&P', '03-10-22', null)
+VALUES (7521, 'D&P', to_date('03-10-22', 'DD-MM-YYYY'), null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
-VALUES (7788, 'D&P', '03-10-22', null)
+VALUES (7788, 'D&P', to_date('03-10-22', 'DD-MM-YYYY'), null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -142,7 +142,7 @@ VALUES (50, 'FINANCIEN', 'LEERDAM', 7839)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
-VALUES (8888, 'de Zeeuw', 'JEA', 'FINANCIER', 7839, '22-03-2003', 1500, null)
+VALUES (8888, 'de Zeeuw', 'JEA', 'FINANCIER', 7839, to_date('22-03-2003', 'DD-MM-YYYY'), 1500, null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
