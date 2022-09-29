@@ -39,36 +39,50 @@ INNER JOIN medewerkers m on m.mnr = u.docent;
 -- Geef in twee kolommen naast elkaar de achternaam van elke cursist (`cursist`)
 -- van alle S02-cursussen, met de achternaam van zijn cursusdocent (`docent`).
 DROP VIEW IF EXISTS s3_2; CREATE OR REPLACE VIEW s3_2 AS                                                     -- [TEST]
-SELECT cursist.naam, docent.naam
-FROM inschrijvingen i
-JOIN uitvoeringen u on i.cursus = 'S02'
-JOIN medewerkers m ON m.mnr = i.cursist
--- JOIN medewerkers m on m.mnr = u.docent
-;
-
-
+SELECT m.naam AS cursist, dm.naam AS docent
+FROM medewerkers m
+INNER JOIN inschrijvingen ON inschrijvingen.cursist = m.mnr
+    AND inschrijvingen.cursus = 'S02'
+INNER JOIN uitvoeringen u ON inschrijvingen.begindatum = u.begindatum
+    AND inschrijvingen.cursus = u.cursus
+INNER JOIN medewerkers dm ON dm.mnr = u.docent;
 
 
 -- S3.3.
 -- Geef elke afdeling (`afdeling`) met de naam van het hoofd van die
 -- afdeling (`hoofd`).
--- DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
+SELECT a.naam AS afdeling, m.naam AS hoofd
+FROM afdelingen a
+INNER JOIN medewerkers m ON a.hoofd = m.mnr;
 
 
 -- S3.4.
 -- Geef de namen van alle medewerkers, de naam van hun afdeling (`afdeling`)
 -- en de bijbehorende locatie.
--- DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
+SELECT m.naam, a.naam AS afdeling, a.locatie
+FROM medewerkers m
+INNER JOIN afdelingen a on m.afd = a.anr;
+
 
 
 -- S3.5.
 -- Geef de namen van alle cursisten die staan ingeschreven voor de cursus S02 van 12 april 2019
--- DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
+SELECT m.naam
+FROM medewerkers m
+INNER JOIN inschrijvingen i ON i.cursist = m.mnr
+    AND i.begindatum = to_date('2019-04-12', 'YYYY-MM-DD')
+    AND i.cursus = 'S02';
 
 
 -- S3.6.
 -- Geef de namen van alle medewerkers en hun toelage.
--- DROP VIEW IF EXISTS s3_6; CREATE OR REPLACE VIEW s3_6 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_6; CREATE OR REPLACE VIEW s3_6 AS                                                     -- [TEST]
+SELECT m.naam, s.toelage
+FROM medewerkers m
+INNER JOIN schalen s ON m.maandsal < s.bovengrens;
 
 
 
