@@ -33,7 +33,7 @@ DROP VIEW IF EXISTS s4_1; CREATE OR REPLACE VIEW s4_1 AS                        
 SELECT mnr, functie, gbdatum
 FROM medewerkers
 WHERE gbdatum < to_date('1980-01-01', 'YYYY-MM-DD')
-AND functie <> 'DIRECTEUR'
+AND (functie = 'TRAINER' OR functie = 'VERKOPER')
 ORDER BY functie;
 
 
@@ -48,13 +48,23 @@ WHERE naam LIKE '% %';
 -- S4.3.
 -- Geef nu code, begindatum en aantal inschrijvingen (`aantal_inschrijvingen`) van alle
 -- cursusuitvoeringen in 2019 met minstens drie inschrijvingen.
--- DROP VIEW IF EXISTS s4_3; CREATE OR REPLACE VIEW s4_3 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s4_3; CREATE OR REPLACE VIEW s4_3 AS                                                     -- [TEST]
+SELECT cursus, begindatum, count(cursus) AS aantal_inschrijvingen
+FROM inschrijvingen
+WHERE begindatum BETWEEN to_date('2019-01-01', 'YYYY-MM-DD') AND to_date('2019-12-31', 'YYYY-MM-DD')
+GROUP BY cursus, begindatum
+HAVING count(cursus) >= 3;
+
 
 
 -- S4.4.
 -- Welke medewerkers hebben een bepaalde cursus meer dan één keer gevolgd?
 -- Geef medewerkernummer en cursuscode.
--- DROP VIEW IF EXISTS s4_4; CREATE OR REPLACE VIEW s4_4 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s4_4; CREATE OR REPLACE VIEW s4_4 AS                                                     -- [TEST]
+SELECT cursist, cursus
+FROM inschrijvingen
+GROUP BY cursist, cursus
+HAVING count(cursus) >= 2;
 
 
 -- S4.5.
@@ -66,7 +76,11 @@ WHERE naam LIKE '% %';
 --   ERM    | 1
 --   JAV    | 4
 --   OAG    | 2
--- DROP VIEW IF EXISTS s4_5; CREATE OR REPLACE VIEW s4_5 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s4_5; CREATE OR REPLACE VIEW s4_5 AS                                                     -- [TEST]
+SELECT cursus, count(cursus) AS aantal
+FROM uitvoeringen
+GROUP BY cursus;
+
 
 
 -- S4.6.
@@ -74,7 +88,9 @@ WHERE naam LIKE '% %';
 -- jongste medewerker (`verschil`) en bepaal de gemiddelde leeftijd van
 -- de medewerkers (`gemiddeld`).
 -- Je mag hierbij aannemen dat elk jaar 365 dagen heeft.
--- DROP VIEW IF EXISTS s4_6; CREATE OR REPLACE VIEW s4_6 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s4_6; CREATE OR REPLACE VIEW s4_6 AS                                                     -- [TEST]
+
+
 
 
 -- S4.7.
